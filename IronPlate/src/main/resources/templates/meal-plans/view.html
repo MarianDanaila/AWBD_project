@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${mealPlan.name} + ' - IronPlate'"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container" style="max-width: 600px;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 th:text="${mealPlan.name}"></h2>
+        <div class="d-flex gap-2">
+            <a th:href="@{/meal-plans/{id}/edit(id=${mealPlan.id})}" class="btn btn-warning">Edit</a>
+            <a th:href="@{/meal-plans}" class="btn btn-outline-secondary">Back</a>
+        </div>
+    </div>
+    <hr>
+
+    <dl class="row">
+        <dt class="col-sm-4">Owner</dt>
+        <dd class="col-sm-8" th:text="${mealPlan.user.username}"></dd>
+
+        <dt class="col-sm-4">Start Date</dt>
+        <dd class="col-sm-8" th:text="${mealPlan.startDate != null ? mealPlan.startDate : '-'}"></dd>
+
+        <dt class="col-sm-4">End Date</dt>
+        <dd class="col-sm-8" th:text="${mealPlan.endDate != null ? mealPlan.endDate : '-'}"></dd>
+
+        <dt class="col-sm-4">Daily Calories</dt>
+        <dd class="col-sm-8" th:text="${mealPlan.dailyCalorieTarget != null ? mealPlan.dailyCalorieTarget + ' kcal' : '-'}"></dd>
+    </dl>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
