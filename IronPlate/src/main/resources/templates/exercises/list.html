@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercises - IronPlate</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Exercises</h2>
+        <a th:href="@{/exercises/new}" class="btn btn-primary">+ New Exercise</a>
+    </div>
+
+    <form th:action="@{/exercises}" method="get" class="mb-3 d-flex gap-2">
+        <input type="text" name="search" class="form-control" placeholder="Search by name..."
+               th:value="${search}">
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+        <a th:href="@{/exercises}" class="btn btn-outline-secondary">Clear</a>
+    </form>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th><a th:href="@{/exercises(sort='name', search=${search})}" class="text-white text-decoration-none">Name</a></th>
+            <th>Muscle Group</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="exercise : ${exercises}">
+            <td th:text="${exercise.name}"></td>
+            <td><span class="badge bg-secondary" th:text="${exercise.muscleGroup}"></span></td>
+            <td><span class="badge bg-info text-dark" th:text="${exercise.exerciseType}"></span></td>
+            <td>
+                <a th:href="@{/exercises/{id}(id=${exercise.id})}" class="btn btn-sm btn-outline-primary">View</a>
+                <a th:href="@{/exercises/{id}/edit(id=${exercise.id})}" class="btn btn-sm btn-outline-warning">Edit</a>
+                <form th:action="@{/exercises/{id}/delete(id=${exercise.id})}" method="post" class="d-inline"
+                      onsubmit="return confirm('Delete this exercise?')">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${exercises.isEmpty()}">
+            <td colspan="4" class="text-center text-muted">No exercises found.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav th:if="${exercises.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${exercises.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/exercises(page=${exercises.number - 1}, size=${exercises.size}, sort=${sort}, search=${search})}">Previous</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, exercises.totalPages - 1)}"
+                th:classappend="${i == exercises.number} ? 'active'">
+                <a class="page-link" th:href="@{/exercises(page=${i}, size=${exercises.size}, sort=${sort}, search=${search})}" th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${exercises.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/exercises(page=${exercises.number + 1}, size=${exercises.size}, sort=${sort}, search=${search})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

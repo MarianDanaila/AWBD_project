@@ -7,19 +7,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">IronPlate</a>
-        <div class="d-flex align-items-center text-white gap-3">
-            <span sec:authentication="name"></span>
-            <form th:action="@{/logout}" method="post" class="mb-0">
-                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
 
-<div class="container mt-5">
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container">
     <h1>Welcome, <span sec:authentication="name"></span>!</h1>
     <p class="text-muted">You are logged in as: <strong sec:authentication="principal.authorities"></strong></p>
 
@@ -53,5 +44,7 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
