@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${foodItem.name} + ' - IronPlate'"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container" style="max-width: 600px;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 th:text="${foodItem.name}"></h2>
+        <div class="d-flex gap-2">
+            <a th:href="@{/food-items/{id}/edit(id=${foodItem.id})}" class="btn btn-warning">Edit</a>
+            <a th:href="@{/food-items}" class="btn btn-outline-secondary">Back</a>
+        </div>
+    </div>
+    <hr>
+
+    <dl class="row">
+        <dt class="col-sm-4">Category</dt>
+        <dd class="col-sm-8"><span class="badge bg-secondary" th:text="${foodItem.category}"></span></dd>
+
+        <dt class="col-sm-4">Calories</dt>
+        <dd class="col-sm-8" th:text="${foodItem.caloriesPer100g != null ? foodItem.caloriesPer100g + ' kcal / 100g' : '-'}"></dd>
+
+        <dt class="col-sm-4">Protein</dt>
+        <dd class="col-sm-8" th:text="${foodItem.proteinPer100g != null ? foodItem.proteinPer100g + ' g / 100g' : '-'}"></dd>
+
+        <dt class="col-sm-4">Carbohydrates</dt>
+        <dd class="col-sm-8" th:text="${foodItem.carbsPer100g != null ? foodItem.carbsPer100g + ' g / 100g' : '-'}"></dd>
+
+        <dt class="col-sm-4">Fat</dt>
+        <dd class="col-sm-8" th:text="${foodItem.fatPer100g != null ? foodItem.fatPer100g + ' g / 100g' : '-'}"></dd>
+    </dl>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
