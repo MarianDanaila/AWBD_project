@@ -3,6 +3,7 @@ package com.awbd.ironplate.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,17 @@ public class TrainingProgram {
     private User user;
 
     @OneToMany(mappedBy = "trainingProgram", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Workout> workouts = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "training_program_exercises",
+        joinColumns = @JoinColumn(name = "training_program_id"),
+        inverseJoinColumns = @JoinColumn(name = "exercise_id")
+    )
+    @ToString.Exclude
+    private List<Exercise> exercises = new ArrayList<>();
 
     public enum DifficultyLevel {
         BEGINNER, INTERMEDIATE, ADVANCED

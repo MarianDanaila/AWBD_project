@@ -38,6 +38,12 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Exercise> findAll() {
+        return exerciseRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<Exercise> findAll(Pageable pageable) {
         return exerciseRepository.findAll(pageable);
     }

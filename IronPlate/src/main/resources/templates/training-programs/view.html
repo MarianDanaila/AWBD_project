@@ -35,6 +35,14 @@
 
         <dt class="col-sm-4">Description</dt>
         <dd class="col-sm-8" th:text="${program.description ?: 'No description'}"></dd>
+
+        <dt class="col-sm-4">Exercises</dt>
+        <dd class="col-sm-8">
+            <span th:if="${program.exercises.isEmpty()}" class="text-muted">None assigned</span>
+            <span th:each="exercise, iter : ${program.exercises}">
+                <span class="badge bg-secondary" th:text="${exercise.name}"></span>
+            </span>
+        </dd>
     </dl>
 </div>
 

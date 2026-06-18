@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,12 @@ public class Exercise {
     private ExerciseType exerciseType;
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<WorkoutExercise> workoutExercises = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "exercises")
+    @ToString.Exclude
+    private List<TrainingProgram> trainingPrograms = new ArrayList<>();
 
     public enum MuscleGroup {
         CHEST, BACK, LEGS, SHOULDERS, ARMS, CORE, FULL_BODY

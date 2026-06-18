@@ -14,6 +14,8 @@ public interface ExerciseService {
 
     Exercise findById(Long id);
 
+    List<Exercise> findAll();
+
     Page<Exercise> findAll(Pageable pageable);
 
     Page<Exercise> findByName(String name, Pageable pageable);
