@@ -13,7 +13,8 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Food Items</h2>
-        <a th:href="@{/food-items/new}" class="btn btn-primary">+ Add Food Item</a>
+        <a th:href="@{/food-items/new}" class="btn btn-primary"
+           sec:authorize="hasAnyRole('COACH','ADMIN')">+ Add Food Item</a>
     </div>
 
     <form th:action="@{/food-items}" method="get" class="d-flex gap-2 mb-3">
@@ -44,9 +45,11 @@
             <td th:text="${item.carbsPer100g != null ? item.carbsPer100g + ' g' : '-'}"></td>
             <td th:text="${item.fatPer100g != null ? item.fatPer100g + ' g' : '-'}"></td>
             <td class="d-flex gap-1">
-                <a th:href="@{/food-items/{id}/edit(id=${item.id})}" class="btn btn-sm btn-warning">Edit</a>
+                <a th:href="@{/food-items/{id}/edit(id=${item.id})}" class="btn btn-sm btn-warning"
+                   sec:authorize="hasAnyRole('COACH','ADMIN')">Edit</a>
                 <form th:action="@{/food-items/{id}/delete(id=${item.id})}" method="post"
-                      onsubmit="return confirm('Delete this food item?')">
+                      onsubmit="return confirm('Delete this food item?')"
+                      sec:authorize="hasAnyRole('COACH','ADMIN')">
                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                 </form>
             </td>

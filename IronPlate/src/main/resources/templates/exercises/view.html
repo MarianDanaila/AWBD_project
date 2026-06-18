@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title th:text="${exercise.name} + ' - IronPlate'"></title>
@@ -13,7 +14,8 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 th:text="${exercise.name}"></h2>
         <div class="d-flex gap-2">
-            <a th:href="@{/exercises/{id}/edit(id=${exercise.id})}" class="btn btn-warning">Edit</a>
+            <a th:href="@{/exercises/{id}/edit(id=${exercise.id})}" class="btn btn-warning"
+               sec:authorize="hasAnyRole('COACH','ADMIN')">Edit</a>
             <a th:href="@{/exercises}" class="btn btn-outline-secondary">Back</a>
         </div>
     </div>

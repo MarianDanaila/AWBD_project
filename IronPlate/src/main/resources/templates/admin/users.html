@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management - IronPlate</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="container">
+    <h2 class="mb-3">User Management</h2>
+
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td>
+                <span class="badge"
+                      th:classappend="${user.role.name() == 'ADMIN'} ? 'bg-danger' : (${user.role.name() == 'COACH'} ? 'bg-primary' : 'bg-secondary')"
+                      th:text="${user.role}"></span>
+            </td>
+            <td class="d-flex gap-2 flex-wrap">
+                <form th:action="@{/admin/users/{id}/role(id=${user.id})}" method="post" class="d-flex gap-1">
+                    <select name="role" class="form-select form-select-sm" style="width: auto;">
+                        <option th:each="r : ${roles}"
+                                th:value="${r}"
+                                th:text="${r}"
+                                th:selected="${r == user.role}"></option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-outline-primary">Set Role</button>
+                </form>
+                <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" method="post"
+                      onsubmit="return confirm('Delete user ' + /*[[${user.username}]]*/ '' + '?')">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${users.isEmpty()}">
+            <td colspan="5" class="text-center text-muted">No users found.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
