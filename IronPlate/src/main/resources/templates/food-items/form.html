@@ -14,50 +14,53 @@
     <hr>
 
     <form th:action="${foodItem.id != null ? '/food-items/' + foodItem.id + '/edit' : '/food-items/new'}"
-          th:object="${foodItem}" method="post" novalidate>
+          th:object="${foodItem}" method="post" class="needs-validation" novalidate>
 
         <div class="mb-3">
             <label class="form-label fw-semibold">Name *</label>
-            <input type="text" class="form-control" th:field="*{name}"
+            <input type="text" class="form-control" th:field="*{name}" required maxlength="100"
                    th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
-            <div class="invalid-feedback" th:errors="*{name}"></div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            <div class="invalid-feedback" th:unless="${#fields.hasErrors('name')}">Name is required.</div>
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-semibold">Category *</label>
-            <select class="form-select" th:field="*{category}"
+            <select class="form-select" th:field="*{category}" required
                     th:classappend="${#fields.hasErrors('category')} ? 'is-invalid'">
                 <option value="">-- Select category --</option>
                 <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"></option>
             </select>
-            <div class="invalid-feedback" th:errors="*{category}"></div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+            <div class="invalid-feedback" th:unless="${#fields.hasErrors('category')}">Category is required.</div>
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-semibold">Calories per 100g (kcal) *</label>
-            <input type="number" step="0.1" class="form-control" th:field="*{caloriesPer100g}"
+            <input type="number" step="0.1" min="0" class="form-control" th:field="*{caloriesPer100g}" required
                    th:classappend="${#fields.hasErrors('caloriesPer100g')} ? 'is-invalid'">
-            <div class="invalid-feedback" th:errors="*{caloriesPer100g}"></div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('caloriesPer100g')}" th:errors="*{caloriesPer100g}"></div>
+            <div class="invalid-feedback" th:unless="${#fields.hasErrors('caloriesPer100g')}">Calories are required.</div>
         </div>
 
         <div class="row g-3 mb-3">
             <div class="col">
                 <label class="form-label">Protein per 100g (g)</label>
-                <input type="number" step="0.1" class="form-control" th:field="*{proteinPer100g}"
+                <input type="number" step="0.1" min="0" class="form-control" th:field="*{proteinPer100g}"
                        th:classappend="${#fields.hasErrors('proteinPer100g')} ? 'is-invalid'">
-                <div class="invalid-feedback" th:errors="*{proteinPer100g}"></div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('proteinPer100g')}" th:errors="*{proteinPer100g}"></div>
             </div>
             <div class="col">
                 <label class="form-label">Carbs per 100g (g)</label>
-                <input type="number" step="0.1" class="form-control" th:field="*{carbsPer100g}"
+                <input type="number" step="0.1" min="0" class="form-control" th:field="*{carbsPer100g}"
                        th:classappend="${#fields.hasErrors('carbsPer100g')} ? 'is-invalid'">
-                <div class="invalid-feedback" th:errors="*{carbsPer100g}"></div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('carbsPer100g')}" th:errors="*{carbsPer100g}"></div>
             </div>
             <div class="col">
                 <label class="form-label">Fat per 100g (g)</label>
-                <input type="number" step="0.1" class="form-control" th:field="*{fatPer100g}"
+                <input type="number" step="0.1" min="0" class="form-control" th:field="*{fatPer100g}"
                        th:classappend="${#fields.hasErrors('fatPer100g')} ? 'is-invalid'">
-                <div class="invalid-feedback" th:errors="*{fatPer100g}"></div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('fatPer100g')}" th:errors="*{fatPer100g}"></div>
             </div>
         </div>
 
@@ -69,5 +72,19 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (function () {
+        'use strict';
+        document.querySelectorAll('.needs-validation').forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
 </body>
 </html>

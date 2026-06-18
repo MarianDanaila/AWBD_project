@@ -14,13 +14,14 @@
     <hr>
 
     <form th:action="${mealPlan.id != null ? '/meal-plans/' + mealPlan.id + '/edit' : '/meal-plans/new'}"
-          th:object="${mealPlan}" method="post" novalidate>
+          th:object="${mealPlan}" method="post" class="needs-validation" novalidate>
 
         <div class="mb-3">
             <label class="form-label fw-semibold">Name *</label>
-            <input type="text" class="form-control" th:field="*{name}"
+            <input type="text" class="form-control" th:field="*{name}" required maxlength="100"
                    th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
-            <div class="invalid-feedback" th:errors="*{name}"></div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            <div class="invalid-feedback" th:unless="${#fields.hasErrors('name')}">Name is required.</div>
         </div>
 
         <div class="row g-3 mb-3">
@@ -38,7 +39,8 @@
             <label class="form-label">Daily Calorie Target (kcal)</label>
             <input type="number" class="form-control" th:field="*{dailyCalorieTarget}" min="500" max="10000"
                    th:classappend="${#fields.hasErrors('dailyCalorieTarget')} ? 'is-invalid'">
-            <div class="invalid-feedback" th:errors="*{dailyCalorieTarget}"></div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('dailyCalorieTarget')}" th:errors="*{dailyCalorieTarget}"></div>
+            <div class="invalid-feedback" th:unless="${#fields.hasErrors('dailyCalorieTarget')}">Must be between 500 and 10000 kcal.</div>
         </div>
 
         <div class="d-flex gap-2">
@@ -49,5 +51,19 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (function () {
+        'use strict';
+        document.querySelectorAll('.needs-validation').forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
 </body>
 </html>

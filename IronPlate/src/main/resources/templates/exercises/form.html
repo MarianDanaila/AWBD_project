@@ -14,40 +14,43 @@
     <hr>
 
     <form th:action="${exercise.id == null} ? @{/exercises/new} : @{/exercises/{id}/edit(id=${exercise.id})}"
-          th:object="${exercise}" method="post">
+          th:object="${exercise}" method="post" class="needs-validation" novalidate>
 
         <div class="mb-3">
             <label class="form-label">Name <span class="text-danger">*</span></label>
-            <input type="text" th:field="*{name}" class="form-control"
+            <input type="text" th:field="*{name}" class="form-control" required maxlength="100"
                    th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
-            <div class="invalid-feedback" th:errors="*{name}"></div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            <div class="invalid-feedback" th:unless="${#fields.hasErrors('name')}">Name is required.</div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea th:field="*{description}" class="form-control" rows="3"
+            <textarea th:field="*{description}" class="form-control" rows="3" maxlength="500"
                       th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"></textarea>
-            <div class="invalid-feedback" th:errors="*{description}"></div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Muscle Group <span class="text-danger">*</span></label>
-            <select th:field="*{muscleGroup}" class="form-select"
+            <select th:field="*{muscleGroup}" class="form-select" required
                     th:classappend="${#fields.hasErrors('muscleGroup')} ? 'is-invalid'">
                 <option value="">-- Select --</option>
                 <option th:each="mg : ${muscleGroups}" th:value="${mg}" th:text="${mg}"></option>
             </select>
-            <div class="invalid-feedback" th:errors="*{muscleGroup}"></div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('muscleGroup')}" th:errors="*{muscleGroup}"></div>
+            <div class="invalid-feedback" th:unless="${#fields.hasErrors('muscleGroup')}">Muscle group is required.</div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Exercise Type <span class="text-danger">*</span></label>
-            <select th:field="*{exerciseType}" class="form-select"
+            <select th:field="*{exerciseType}" class="form-select" required
                     th:classappend="${#fields.hasErrors('exerciseType')} ? 'is-invalid'">
                 <option value="">-- Select --</option>
                 <option th:each="et : ${exerciseTypes}" th:value="${et}" th:text="${et}"></option>
             </select>
-            <div class="invalid-feedback" th:errors="*{exerciseType}"></div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('exerciseType')}" th:errors="*{exerciseType}"></div>
+            <div class="invalid-feedback" th:unless="${#fields.hasErrors('exerciseType')}">Exercise type is required.</div>
         </div>
 
         <div class="d-flex gap-2">
@@ -58,5 +61,19 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (function () {
+        'use strict';
+        document.querySelectorAll('.needs-validation').forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
 </body>
 </html>
