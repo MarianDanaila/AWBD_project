@@ -27,7 +27,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public User save(User user) {
         log.debug("Saving user: {}", user.getUsername());
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+        log.info("User saved with id: {}", saved.getId());
+        return saved;
     }
 
     @Override
@@ -40,7 +42,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional(readOnly = true)
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", id));
+                .orElseThrow(() -> {
+                    log.error("User not found with id: {}", id);
+                    return new ResourceNotFoundException("User", id);
+                });
     }
 
     @Override
@@ -54,9 +59,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void deleteById(Long id) {
         log.debug("Deleting user with id: {}", id);
         if (!userRepository.existsById(id)) {
+            log.error("Cannot delete user - not found with id: {}", id);
             throw new ResourceNotFoundException("User", id);
         }
         userRepository.deleteById(id);
+        log.info("User deleted with id: {}", id);
     }
 
     @Override
@@ -74,8 +81,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.debug("Loading user by username: {}", username);
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                .orElseThrow(() -> {
+                    log.error("Authentication failed - user not found: {}", username);
+                    return new UsernameNotFoundException("User not found: " + username);
+                });
+        log.info("User authenticated: {}", username);
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())

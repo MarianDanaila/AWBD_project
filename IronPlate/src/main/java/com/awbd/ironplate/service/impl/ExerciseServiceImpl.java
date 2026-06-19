@@ -26,14 +26,19 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Transactional
     public Exercise save(Exercise exercise) {
         log.debug("Saving exercise: {}", exercise.getName());
-        return exerciseRepository.save(exercise);
+        Exercise saved = exerciseRepository.save(exercise);
+        log.info("Exercise saved with id: {}", saved.getId());
+        return saved;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Exercise findById(Long id) {
         return exerciseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Exercise", id));
+                .orElseThrow(() -> {
+                    log.error("Exercise not found with id: {}", id);
+                    return new ResourceNotFoundException("Exercise", id);
+                });
     }
 
     @Override
@@ -71,8 +76,10 @@ public class ExerciseServiceImpl implements ExerciseService {
     public void deleteById(Long id) {
         log.debug("Deleting exercise with id: {}", id);
         if (!exerciseRepository.existsById(id)) {
+            log.error("Cannot delete exercise - not found with id: {}", id);
             throw new ResourceNotFoundException("Exercise", id);
         }
         exerciseRepository.deleteById(id);
+        log.info("Exercise deleted with id: {}", id);
     }
 }
