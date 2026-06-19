@@ -57,6 +57,10 @@ public class SecurityConfig {
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
+            .rememberMe(rememberMe -> rememberMe
+                .key("ironplate-remember-me-key")
+                .tokenValiditySeconds(7 * 24 * 60 * 60)
+            )
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout=true")
                 .permitAll()
