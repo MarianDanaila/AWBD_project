@@ -24,7 +24,7 @@
             <th><a th:href="@{/meal-plans(sort='name')}" class="text-white text-decoration-none">Name</a></th>
             <th>Start Date</th>
             <th>End Date</th>
-            <th>Daily Calories</th>
+            <th><a th:href="@{/meal-plans(sort='dailyCalorieTarget')}" class="text-white text-decoration-none">Daily Calories</a></th>
             <th th:if="${isAdmin}">Owner</th>
             <th>Actions</th>
         </tr>
