@@ -4,6 +4,8 @@ import com.awbd.ironplate.userservice.config.JwtUtil;
 import com.awbd.ironplate.userservice.domain.User;
 import com.awbd.ironplate.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,17 +43,20 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Cacheable(value = "users", key = "#id")
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found: " + id));
     }
 
+    @CacheEvict(value = "users", key = "#id")
     public User updateRole(Long id, User.Role role) {
         User user = findById(id);
         user.setRole(role);
         return userRepository.save(user);
     }
 
+    @CacheEvict(value = "users", key = "#id")
     public void deleteById(Long id) {
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("User not found: " + id);

@@ -6,6 +6,8 @@ import com.awbd.ironplate.nutritionservice.repository.FoodItemRepository;
 import com.awbd.ironplate.nutritionservice.repository.MealPlanRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,16 +24,19 @@ public class NutritionService {
         return foodItemRepository.findAll(pageable);
     }
 
+    @Cacheable(value = "food-items", key = "#id")
     public FoodItem findFoodItemById(Long id) {
         return foodItemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("FoodItem not found: " + id));
     }
 
+    @CacheEvict(value = "food-items", key = "#result.id")
     public FoodItem saveFoodItem(FoodItem foodItem) {
         log.info("Saving food item: {}", foodItem.getName());
         return foodItemRepository.save(foodItem);
     }
 
+    @CacheEvict(value = "food-items", key = "#id")
     public void deleteFoodItem(Long id) {
         log.info("Deleting food item: {}", id);
         foodItemRepository.deleteById(id);

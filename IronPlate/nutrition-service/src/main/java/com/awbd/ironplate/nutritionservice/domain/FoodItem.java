@@ -3,11 +3,12 @@ package com.awbd.ironplate.nutritionservice.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "food_items")
 @Data
-public class FoodItem {
+public class FoodItem implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
