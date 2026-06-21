@@ -1,5 +1,7 @@
 package com.awbd.ironplate.fitnessservice.service;
 
+import com.awbd.ironplate.fitnessservice.client.UserClient;
+import com.awbd.ironplate.fitnessservice.client.UserDto;
 import com.awbd.ironplate.fitnessservice.domain.Exercise;
 import com.awbd.ironplate.fitnessservice.domain.TrainingProgram;
 import com.awbd.ironplate.fitnessservice.repository.ExerciseRepository;
@@ -17,6 +19,7 @@ public class FitnessService {
 
     private final ExerciseRepository exerciseRepository;
     private final TrainingProgramRepository trainingProgramRepository;
+    private final UserClient userClient;
 
     public Page<Exercise> findAllExercises(Pageable pageable) {
         return exerciseRepository.findAll(pageable);
@@ -51,6 +54,14 @@ public class FitnessService {
     }
 
     public TrainingProgram saveProgram(TrainingProgram program) {
+        if (program.getUserId() != null) {
+            UserDto user = userClient.getUserById(program.getUserId());
+            if (user == null) {
+                log.warn("User {} not found or user-service unavailable — saving program anyway", program.getUserId());
+            } else {
+                log.info("Validated user {} for training program", user.getUsername());
+            }
+        }
         log.info("Saving training program: {}", program.getName());
         return trainingProgramRepository.save(program);
     }
@@ -60,3 +71,4 @@ public class FitnessService {
         trainingProgramRepository.deleteById(id);
     }
 }
+
