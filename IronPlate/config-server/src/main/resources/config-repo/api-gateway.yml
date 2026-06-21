@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/auth/**, /users/**
+        - id: fitness-service
+          uri: lb://fitness-service
+          predicates:
+            - Path=/exercises/**, /training-programs/**
+        - id: nutrition-service
+          uri: lb://nutrition-service
+          predicates:
+            - Path=/food-items/**, /meal-plans/**
+
+jwt:
+  secret: ironplate-jwt-secret-key-must-be-at-least-256-bits-long-for-hs256

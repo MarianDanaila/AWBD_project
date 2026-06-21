@@ -1,0 +1,3 @@
+CREATE DATABASE IF NOT EXISTS ironplate_users;
+CREATE DATABASE IF NOT EXISTS ironplate_fitness;
+CREATE DATABASE IF NOT EXISTS ironplate_nutrition;
