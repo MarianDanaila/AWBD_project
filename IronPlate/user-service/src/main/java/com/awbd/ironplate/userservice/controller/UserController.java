@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,12 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping("/users/instance")
+    public ResponseEntity<Map<String, String>> instance() throws Exception {
+        String host = InetAddress.getLocalHost().getHostName();
+        return ResponseEntity.ok(Map.of("instance", host));
+    }
 
     @PostMapping("/auth/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> credentials) {
