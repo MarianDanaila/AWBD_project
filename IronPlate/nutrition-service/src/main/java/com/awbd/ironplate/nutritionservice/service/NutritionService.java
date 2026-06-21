@@ -1,5 +1,7 @@
 package com.awbd.ironplate.nutritionservice.service;
 
+import com.awbd.ironplate.nutritionservice.client.UserClient;
+import com.awbd.ironplate.nutritionservice.client.UserDto;
 import com.awbd.ironplate.nutritionservice.domain.FoodItem;
 import com.awbd.ironplate.nutritionservice.domain.MealPlan;
 import com.awbd.ironplate.nutritionservice.repository.FoodItemRepository;
@@ -19,6 +21,7 @@ public class NutritionService {
 
     private final FoodItemRepository foodItemRepository;
     private final MealPlanRepository mealPlanRepository;
+    private final UserClient userClient;
 
     public Page<FoodItem> findAllFoodItems(Pageable pageable) {
         return foodItemRepository.findAll(pageable);
@@ -56,6 +59,14 @@ public class NutritionService {
     }
 
     public MealPlan saveMealPlan(MealPlan mealPlan) {
+        if (mealPlan.getUserId() != null) {
+            UserDto user = userClient.getUserById(mealPlan.getUserId());
+            if (user == null) {
+                log.warn("User {} not found or user-service unavailable — saving meal plan anyway", mealPlan.getUserId());
+            } else {
+                log.info("Validated user {} for meal plan", user.getUsername());
+            }
+        }
         log.info("Saving meal plan: {}", mealPlan.getName());
         return mealPlanRepository.save(mealPlan);
     }

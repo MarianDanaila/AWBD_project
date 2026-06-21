@@ -6,6 +6,7 @@ import com.awbd.ironplate.fitnessservice.domain.Exercise;
 import com.awbd.ironplate.fitnessservice.domain.TrainingProgram;
 import com.awbd.ironplate.fitnessservice.repository.ExerciseRepository;
 import com.awbd.ironplate.fitnessservice.repository.TrainingProgramRepository;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -53,6 +54,7 @@ public class FitnessService {
                 .orElseThrow(() -> new RuntimeException("TrainingProgram not found: " + id));
     }
 
+    @Retry(name = "user-service")
     public TrainingProgram saveProgram(TrainingProgram program) {
         if (program.getUserId() != null) {
             UserDto user = userClient.getUserById(program.getUserId());
